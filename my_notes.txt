@@ -1,6 +1,7 @@
 
 Keys
 x - delete character
+D - equivalent of d$
 r - replace character
 R - replace motion
 c - change (delete motion and insert mode)
@@ -16,6 +17,25 @@ U - new change to undo the changes for current line
 	- without "/gc" - first occurence
 	- with only "/g" - all occurences
 	- with only "/c" - ask for confirmation each time
+	- If you can run this in visual mode, it only affects selected lines
+^ - go to first non-blank character
+
+From The Primeagen - https://www.youtube.com/watch?v=uL9oOZStezw&list=PLeZYXXzdoLhxP0fxWnzzZqpof8Cj2SODL&index=4&ab_channel=ThePrimeagen
+= - auto indent
+	=ap - align entire paragraph
+NOTE - I don't like using vim-easymotion because if I have to use another editor, chances are there's a vim plugin for it and you can move around pretty fast with vim default motions
+><num><up/down motion> - indent num lines
+	e.g. >4j will indent 4 lines
+:LspStop - if you don't want to see LSP stuff
+<c-a> - increment number
+<c-x> - decrement number
+Substitute expression s/\(\w.*\)/data[0] = "\1";
+	Whatever is within \( and \) can be referenced as a parameter. e.g. \1
+	\w - Matches any word character (one character)
+	.* - Matches 0 or more characters
+g<c-a> after selecting text in visual mode - increments appropriately all selected numbers
+	This works even if you select whole lines with text on them
+	If you don't include "g", then all increment same number
 
 Motions
 w/W - word forward
@@ -57,3 +77,7 @@ Other helpful notes not included already in kickstarter's init.lua or Tutor
 In normal mode
 	ZZ - save and quit. Equivalent to :wq
 :LspInfo - to see what LSPs are active
+File explorer
+	:Ex
+	:Sex - horizontal split
+	:Vex - vertical split

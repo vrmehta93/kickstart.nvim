@@ -168,7 +168,7 @@ vim.o.scrolloff = 10
 vim.o.confirm = true
 
 -- MY OPTIONS
-vim.o.backup = true
+vim.o.backup = false
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -466,6 +466,37 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      -- Shortcuts/remaps from ThePrimeagen
+      -- https://www.youtube.com/watch?v=w7i4amO_zaE&list=PLeZYXXzdoLhxP0fxWnzzZqpof8Cj2SODL&index=3&ab_channel=ThePrimeagen
+      vim.keymap.set('n', '<leader>pv', vim.cmd.Ex, { desc = 'Open File Explorer. Equivalent of :Ex' })
+      vim.keymap.set('n', '<C-p>', builtin.git_files, { desc = 'Git file search' })
+      vim.keymap.set('n', '<leader>ps', function()
+        builtin.grep_string { search = vim.fn.input 'Grep > ' }
+      end, { desc = 'Project search' })
+      -- From https://github.com/ThePrimeagen/init.lua/blob/master/lua/theprimeagen/remap.lua
+      vim.keymap.set('n', '<C-d>', '<C-d>zz')
+      vim.keymap.set('n', '<C-u>', '<C-u>zz')
+      vim.keymap.set('n', 'n', 'nzzzv')
+      vim.keymap.set('n', '=ap', "ma=ap'a")
+      vim.keymap.set('n', 'N', 'Nzzzv')
+      vim.keymap.set('n', '<leader>zig', '<cmd>LspRestart<cr>')
+      vim.keymap.set('x', '<leader>p', [["_dP]])
+      vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
+      vim.keymap.set('n', '<leader>Y', [["+Y]])
+      vim.keymap.set({ 'n', 'v' }, '<leader>d', '"_d')
+      vim.keymap.set('i', '<C-c>', '<Esc>')
+      vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
+      vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
+      vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
+      vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
+      vim.keymap.set(
+        'n',
+        '<leader>r',
+        [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+        { desc = 'Replace/substitute word under cursor throughout file' }
+      )
+      vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
     end,
   },
 
@@ -976,6 +1007,7 @@ require('lazy').setup({
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    -- For Treesitter Playground, :Inspect, :InspectTree (equivalent of :TSPlaygroundToggle) and :EditQuery
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -998,7 +1030,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
