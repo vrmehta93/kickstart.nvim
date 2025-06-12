@@ -204,10 +204,17 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
--- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
--- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
--- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
--- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+vim.keymap.set('n', '<C-S-h>', '<C-w>H', { desc = 'Move window to the left' })
+vim.keymap.set('n', '<C-S-l>', '<C-w>L', { desc = 'Move window to the right' })
+vim.keymap.set('n', '<C-S-j>', '<C-w>J', { desc = 'Move window to the lower' })
+vim.keymap.set('n', '<C-S-k>', '<C-w>K', { desc = 'Move window to the upper' })
+
+-- My mappings to control the size of splits (height/width) (source TJ DeVries)
+-- NOTE - in iTerm2 (macOS), Go to Profiles > Edit Profile > Keys tab > General tab > For "Left/Right option key", set value to "Esc+" from "Normal"
+vim.keymap.set('n', '<M-,>', '<Cmd>resize -5<CR>', { desc = 'Horizontal split: decrease height' })
+vim.keymap.set('n', '<M-.>', '<Cmd>resize +5<CR>', { desc = 'Horizontal split: increase height' })
+vim.keymap.set('n', '<M-t>', '<Cmd>vertical resize +5<CR>', { desc = 'Vertical split: increase width' })
+vim.keymap.set('n', '<M-s>', '<Cmd>vertical resize -5<CR>', { desc = 'Vertical split: decrease width' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -425,6 +432,8 @@ require('lazy').setup({
             require('telescope.themes').get_dropdown(),
           },
         },
+
+        require('custom.modules.multigrep').setup(), -- Maps to <leader>fg
       }
 
       -- Enable Telescope extensions if they are installed
@@ -497,6 +506,8 @@ require('lazy').setup({
         { desc = 'Replace/substitute word under cursor throughout file' }
       )
       vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
+      vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv") -- Overrides J (aka Join)
+      vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
     end,
   },
 
