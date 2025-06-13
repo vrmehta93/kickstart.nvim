@@ -94,3 +94,4 @@ gx - go to URL
 :set spell spelllang=en_us - Enable spell check
 	z= - Place cursor underneath the highlighted word to see suggestions to fix
 	zg - Add word to dictionary
+
