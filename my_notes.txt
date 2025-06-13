@@ -63,6 +63,8 @@ Misc
 <c-g> - file location and status
 % - find matching parenthesis/bracket
 :!<command> - execute external command
+	e.g. (select bunch of lines in visual mode) > :<,>!sort | unique
+	This sorts the lines and only keeps unique values
 :r - read external file/command
 <c-d> OR <tab> - command completions
 Telescope plugin is a fuzzy finder (e.g <leader>sh)
@@ -81,3 +83,14 @@ File explorer
 	:Ex
 	:Sex - horizontal split
 	:Vex - vertical split
+Buffers
+	:bnext or :bn
+	:bprevious or :bp
+	:bdelete or :bd
+To run a command in normal mode - :normal <commands> OR :norm
+	e.g. :normal iHello or :norm iHello
+gf - go to file
+gx - go to URL
+:set spell spelllang=en_us - Enable spell check
+	z= - Place cursor underneath the highlighted word to see suggestions to fix
+	zg - Add word to dictionary
