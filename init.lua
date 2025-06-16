@@ -421,11 +421,11 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          mappings = {
+            i = { ['<c-enter>'] = 'to_fuzzy_refine', ['<C-[>'] = require('telescope.actions').close },
+          },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -433,7 +433,7 @@ require('lazy').setup({
           },
         },
 
-        require('custom.modules.multigrep').setup(), -- Maps to <leader>fg
+        require('custom.modules.multigrep').setup(), -- Maps to <leader>fg (defined in multigrep.lua)
       }
 
       -- Enable Telescope extensions if they are installed
@@ -494,7 +494,7 @@ require('lazy').setup({
       vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
       vim.keymap.set('n', '<leader>Y', [["+Y]])
       vim.keymap.set({ 'n', 'v' }, '<leader>d', '"_d')
-      vim.keymap.set('i', '<C-c>', '<Esc>')
+      vim.keymap.set({ 'i', 'n', 'v', 'x' }, '<C-[>', '<Esc>')
       vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
       vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
       vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
@@ -508,6 +508,10 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
       vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv") -- Overrides J (aka Join)
       vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+      vim.keymap.set('n', '<leader>w', ':w<CR>', { desc = 'Write/Save file' })
+      vim.keymap.set('n', '<leader>zx', ':q<CR>', { desc = 'Quit Neovim' })
+      -- ZZ - (normal mode only) save and exit aka :wq
+      -- ZQ - quit without saving aka :q!
     end,
   },
 
