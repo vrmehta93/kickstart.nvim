@@ -40,15 +40,12 @@ return {
       -- must work in the shell
 
       -- LUA
-      --local lua_debugger_path = vim.fn.stdpath 'data' .. '/mason/packages/local-lua-debugger-vscode/'
       local lua_debugger_path = vim.fn.stdpath 'data' .. '/mason/share/local-lua-debugger-vscode/'
       -- Adapter source - nvim-dap wiki
       dap.adapters['local-lua'] = {
         type = 'executable',
         command = 'node',
         args = {
-          -- IGNORE - NOTE - Mason is high and on crack (On my MacOS at least) - it adds an extra "extension" folder inside the extension folder
-          --lua_debugger_path .. '/extension/extension/debugAdapter.js',
           lua_debugger_path .. '/extension/debugAdapter.js',
         },
         enrich_config = function(config, on_config)
