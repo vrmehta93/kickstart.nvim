@@ -209,12 +209,39 @@ vim.keymap.set('n', '<C-S-l>', '<C-w>L', { desc = 'Move window to the right' })
 vim.keymap.set('n', '<C-S-j>', '<C-w>J', { desc = 'Move window to the lower' })
 vim.keymap.set('n', '<C-S-k>', '<C-w>K', { desc = 'Move window to the upper' })
 
--- My mappings to control the size of splits (height/width) (source TJ DeVries)
 -- NOTE - in iTerm2 (macOS), Go to Profiles > Edit Profile > Keys tab > General tab > For "Left/Right option key", set value to "Esc+" from "Normal"
+-- My mappings
+vim.keymap.set('n', '<leader>o', 'o<Esc>')
+vim.keymap.set('n', '<leader>O', 'O<Esc>')
+vim.keymap.set('n', '<leader>w', ':w<CR>', { desc = 'Write/Save file' })
+vim.keymap.set('n', '<leader>zx', ':q<CR>', { desc = 'Quit Neovim' })
+-- ZZ - (normal mode only) save and exit aka :wq
+-- ZQ - quit without saving aka :q!
+-- To control the size of splits (height/width) (source TJ DeVries)
 vim.keymap.set('n', '<M-,>', '<Cmd>resize -5<CR>', { desc = 'Horizontal split: decrease height' })
 vim.keymap.set('n', '<M-.>', '<Cmd>resize +5<CR>', { desc = 'Horizontal split: increase height' })
 vim.keymap.set('n', '<M-t>', '<Cmd>vertical resize +5<CR>', { desc = 'Vertical split: increase width' })
 vim.keymap.set('n', '<M-s>', '<Cmd>vertical resize -5<CR>', { desc = 'Vertical split: decrease width' })
+-- From https://github.com/ThePrimeagen/init.lua/blob/master/lua/theprimeagen/remap.lua
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', '=ap', "ma=ap'a")
+vim.keymap.set('n', 'N', 'Nzzzv')
+vim.keymap.set('n', '<leader>zig', '<cmd>LspRestart<cr>')
+vim.keymap.set('x', '<leader>p', [["_dP]])
+--vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
+-- vim.keymap.set('n', '<leader>Y', [["+Y]])
+vim.keymap.set({ 'n', 'v' }, '<leader>d', '"_d')
+vim.keymap.set({ 'i', 'n', 'v', 'x' }, '<C-[>', '<Esc>')
+vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
+vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
+vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
+vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
+vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Replace/substitute word under cursor throughout file' })
+-- vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv") -- Overrides J (aka Join). Default join still works when not in visual mode (aka line cursor is on)
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -378,6 +405,7 @@ require('lazy').setup({
     dependencies = {
       'nvim-lua/plenary.nvim',
       'BurntSushi/ripgrep', -- for live_grep and grep_string
+      'sharkdp/fd', -- finder
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
 
@@ -423,8 +451,12 @@ require('lazy').setup({
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         defaults = {
-          mappings = {
-            i = { ['<c-enter>'] = 'to_fuzzy_refine', ['<C-[>'] = require('telescope.actions').close },
+          mappings = { -- See `:help telescope.mappings`
+            i = { -- See `:help telescope.actions`
+              ['<c-enter>'] = 'to_fuzzy_refine',
+              ['<C-[>'] = 'close', -- TODO - Determine how to go into normal mode
+              -- ['<C-BS>'] = '', -- TODO - Determine how to undo layers of fuzzy search
+            },
           },
         },
         -- pickers = {}
@@ -434,7 +466,7 @@ require('lazy').setup({
           },
         },
 
-        require('custom.modules.multigrep').setup(), -- Maps to <leader>fg (defined in multigrep.lua)
+        require('custom.modules.multigrep').setup(), -- Maps to <leader>fg (defined in multigrep.lua aka text AND file filter)
       }
 
       -- Enable Telescope extensions if they are installed
@@ -474,45 +506,24 @@ require('lazy').setup({
 
       -- Shortcut for searching your Neovim configuration files
       vim.keymap.set('n', '<leader>sn', function()
-        builtin.find_files { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[S]earch [N]eovim files' })
+        -- builtin.find_files { cwd = vim.fn.stdpath 'config' }
+        -- end, { desc = '[S]earch [N]eovim files' })
+        builtin.find_files {
+          cwd = '~/.dotfiles', -- TODO - Determine if ~ needs to be replaced with env var
+          find_command = {
+            'fd',
+            '--type',
+            'f',
+            '--hidden',
+            '--exclude',
+            '.git',
+          },
+        }
+      end, { desc = '[S]earch [D]ot files' })
 
       -- Shortcuts/remaps from ThePrimeagen
       -- https://www.youtube.com/watch?v=w7i4amO_zaE&list=PLeZYXXzdoLhxP0fxWnzzZqpof8Cj2SODL&index=3&ab_channel=ThePrimeagen
-      vim.keymap.set('n', '<leader>pv', vim.cmd.Ex, { desc = 'Open File Explorer. Equivalent of :Ex' })
       vim.keymap.set('n', '<C-p>', builtin.git_files, { desc = 'Git file search' })
-      vim.keymap.set('n', '<leader>ps', function()
-        builtin.grep_string { search = vim.fn.input 'Grep > ' }
-      end, { desc = 'Project search' })
-      -- From https://github.com/ThePrimeagen/init.lua/blob/master/lua/theprimeagen/remap.lua
-      vim.keymap.set('n', '<C-d>', '<C-d>zz')
-      vim.keymap.set('n', '<C-u>', '<C-u>zz')
-      vim.keymap.set('n', 'n', 'nzzzv')
-      vim.keymap.set('n', '=ap', "ma=ap'a")
-      vim.keymap.set('n', 'N', 'Nzzzv')
-      vim.keymap.set('n', '<leader>zig', '<cmd>LspRestart<cr>')
-      vim.keymap.set('x', '<leader>p', [["_dP]])
-      vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
-      vim.keymap.set('n', '<leader>Y', [["+Y]])
-      vim.keymap.set({ 'n', 'v' }, '<leader>d', '"_d')
-      vim.keymap.set({ 'i', 'n', 'v', 'x' }, '<C-[>', '<Esc>')
-      vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
-      vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
-      vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
-      vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
-      vim.keymap.set(
-        'n',
-        '<leader>r',
-        [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-        { desc = 'Replace/substitute word under cursor throughout file' }
-      )
-      vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
-      vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv") -- Overrides J (aka Join)
-      vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
-      vim.keymap.set('n', '<leader>w', ':w<CR>', { desc = 'Write/Save file' })
-      vim.keymap.set('n', '<leader>zx', ':q<CR>', { desc = 'Quit Neovim' })
-      -- ZZ - (normal mode only) save and exit aka :wq
-      -- ZQ - quit without saving aka :q!
     end,
   },
 
