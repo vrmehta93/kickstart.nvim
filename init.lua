@@ -473,6 +473,14 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
 
+      -- Telescope Buffer shortcuts (in insert mode)
+      -- Source - https://github.com/nvim-telescope/telescope.nvim#default-mappings
+      -- <C-/> - show mappings for picker actions
+      -- <C-f> - scroll left in preview window
+      -- <C-k> - scroll right in preview window
+      -- <C-d> - scroll down in preview window
+      -- <C-u> - scroll up in preview window
+
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
@@ -520,6 +528,14 @@ require('lazy').setup({
           },
         }
       end, { desc = '[S]earch [D]ot files' })
+
+      -- Shortcut for searching your contents of Neovim configuration files
+      vim.keymap.set('n', '<leader>sm', function()
+        builtin.live_grep {
+          cwd = '~/.dotfiles', -- TODO - Determine if ~ needs to be replaced with env var
+          additional_args = { '--hidden', '--glob', '!**/.git/*' }, -- since live_grep uses ripgrep/rg behind the scenes
+        }
+      end, { desc = '[S]earch [D]ot files by [G]rep' })
 
       -- Shortcuts/remaps from ThePrimeagen
       -- https://www.youtube.com/watch?v=w7i4amO_zaE&list=PLeZYXXzdoLhxP0fxWnzzZqpof8Cj2SODL&index=3&ab_channel=ThePrimeagen
