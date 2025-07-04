@@ -5,6 +5,7 @@ D - equivalent of d$
 r - replace character
 R - replace motion
 c - change (delete motion and insert mode)
+s - delete character under cursor and go into insert mode
 i/a - insert mode left/right side of block cursor
 A - append text at the end of line
 p/P - put after/before cursor
@@ -58,6 +59,7 @@ Help Navigation
 K - find/goto documentation of word under cursor
 :help OR <f1>
 <c-w><c-w> - jump between current buffer and help buffer
+<c-6> (aka <c-^) - jump to alternate file
 
 Misc
 <c-g> - file location and status

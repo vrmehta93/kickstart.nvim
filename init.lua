@@ -260,7 +260,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
--- Above line is equivalent of calling 'vim.fn.stdpath("data") + "/lazy/lazy.nvim"
+-- Above line is equivalent of calling 'vim.fn.stdpath("data") + "/lazy/lazy.nvim"'
 -- vim.fn.stdpath("data") = ~/.local/share/nvim
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
@@ -269,6 +269,27 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     error('Error cloning lazy.nvim:\n' .. out)
   end
 end
+
+-- My commands
+-- Auto save files
+vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
+  pattern = { '*' },
+  callback = function()
+    if vim.bo.buftype == '' then
+      -- Format with conform.nvim
+      require('conform').format({
+        async = true, -- Asynchronous formatting
+        lsp_format = 'fallback', -- Use LSP if available, else formatter
+        timeout_ms = 1000, -- Match your conform.nvim config
+      }, function(err)
+        if not err then
+          -- Save only if formatting succeeds
+          vim.cmd 'write'
+        end
+      end)
+    end
+  end,
+})
 
 ---@type vim.Option
 local rtp = vim.opt.rtp
@@ -288,7 +309,7 @@ rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  { 'NMAC427/guess-indent.nvim', opts = {} }, -- Detect tabstop and shiftwidth automatically
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -1032,7 +1053,28 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'python',
+        -- My treesitter plugins
+        'comment',
+        'css',
+        'dockerfile',
+        'editorconfig',
+        'git_config',
+        'json',
+        'tmux',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
