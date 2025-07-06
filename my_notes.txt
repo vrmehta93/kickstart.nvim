@@ -6,12 +6,15 @@ r - replace character
 R - replace motion
 c - change (delete motion and insert mode)
 s - delete character under cursor and go into insert mode
+S - delete line and go into insert mode. Equivalent of "cc"
 i/a - insert mode left/right side of block cursor
 A - append text at the end of line
 p/P - put after/before cursor
 o/O - add line after/before cursor and insert mode
 u - undo change
 U - new change to undo the changes for current line
+f/F - forwards/backwards character search on a line. Cursor is on the character
+t/T - forwards/backwards character search on a line with cursor before/after the character (depending if you're going backwards or forwards)
 <c-r> - redo change
 :%s/<old>/<new>/gc - substitute command
 	- "%" means for the whole file. Replace with "#,#" for line numbers in file

@@ -272,7 +272,8 @@ end
 
 -- My commands
 -- Auto save files
-vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
+-- NOTE - This is experimental. There were issues with undo with "TextChanged" event
+vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
   pattern = { '*' },
   callback = function()
     if vim.bo.buftype == '' then
@@ -824,6 +825,16 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
+        -- LSPs
+        'bash-language-server',
+        'lua-language-server',
+        -- DAPs
+        'debugpy',
+        'local-lua-debugger-vscode',
+        -- Linters
+        'markdownlint', -- Also a formatter. This is a dependency of kickstart.plugins.lint (nvim-lint)
+        'shellcheck',
+        -- Formatters
         'stylua', -- Used to format Lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -1046,53 +1057,6 @@ require('lazy').setup({
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
-  },
-  { -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = {
-        'bash',
-        'c',
-        'diff',
-        'html',
-        'lua',
-        'luadoc',
-        'markdown',
-        'markdown_inline',
-        'query',
-        'vim',
-        'vimdoc',
-        'python',
-        -- My treesitter plugins
-        'comment',
-        'css',
-        'dockerfile',
-        'editorconfig',
-        'git_config',
-        'json',
-        'tmux',
-      },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
-    -- For Treesitter Playground, :Inspect, :InspectTree (equivalent of :TSPlaygroundToggle) and :EditQuery
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
