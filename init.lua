@@ -270,28 +270,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   end
 end
 
--- My commands
--- Auto save files
--- NOTE - This is experimental. There were issues with undo with "TextChanged" event
-vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
-  pattern = { '*' },
-  callback = function()
-    if vim.bo.buftype == '' then
-      -- Format with conform.nvim
-      require('conform').format({
-        async = true, -- Asynchronous formatting
-        lsp_format = 'fallback', -- Use LSP if available, else formatter
-        timeout_ms = 1000, -- Match your conform.nvim config
-      }, function(err)
-        if not err then
-          -- Save only if formatting succeeds
-          vim.cmd 'write'
-        end
-      end)
-    end
-  end,
-})
-
 ---@type vim.Option
 local rtp = vim.opt.rtp
 -- rtp = runtimepath
@@ -421,7 +399,7 @@ require('lazy').setup({
   --
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
 
-  { -- Fuzzy Finder (files, lsp, etc)
+  { -- Telescope - Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
     dependencies = {
@@ -515,6 +493,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch existing plugins/commands' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
