@@ -493,7 +493,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-      vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch existing plugins/commands' })
+      vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch existing commands' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -766,6 +766,7 @@ require('lazy').setup({
         -- ts_ls = {},
         --
 
+        -- Lua
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -780,13 +781,16 @@ require('lazy').setup({
             },
           },
         },
-        -- MY LSPs
+        -- Bash
         shellcheck = {}, -- dependency of "bash-language-server"
         bashls = { -- bash-language-server
           -- default filetypes are only "bash" and "sh"
           -- Appending startup files
           filetypes = { 'bash', 'sh', '.bash_profile', '.zprofile', '.profile', '.bashrc', '.zshrc' },
         },
+        -- Python
+        -- pylsp = {}, -- python-lsp-server
+        pyright = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -805,15 +809,21 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         -- LSPs
-        'bash-language-server',
-        'lua-language-server',
+
         -- DAPs
-        'debugpy',
+        --- Lua
         'local-lua-debugger-vscode',
+        --- Python
+        'debugpy',
+
         -- Linters
-        'markdownlint', -- Also a formatter. This is a dependency of kickstart.plugins.lint (nvim-lint)
+        --- Lua
         'shellcheck',
+        --- Misc
+        'markdownlint', -- Also a formatter. This is a dependency of kickstart.plugins.lint (nvim-lint)
+
         -- Formatters
+        --- Lua
         'stylua', -- Used to format Lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
