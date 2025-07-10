@@ -52,6 +52,8 @@ Navigation
 <c-u> - half page up
 <c-f> - page down
 <c-b> - page up
+<c-e> - scroll down without moving cursor
+<c-y> - scroll up without moving cursor
 '/'/? - forward/backward search
 <c-o>/<c-i> - go back/forward to where you were
 
