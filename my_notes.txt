@@ -54,14 +54,14 @@ Navigation
 <c-b> - page up
 <c-e> - scroll down without moving cursor
 <c-y> - scroll up without moving cursor
-'/'/? - forward/backward search
+/ or ? - forward/backward search
 <c-o>/<c-i> - go back/forward to where you were
 
 Other
 ggyG - yank whole file
 
 Help Navigation
-K - find/goto documentation of word under cursor
+K - find/goto documentation of word under cursor (not just for help but also for LSPs to peek/preview documentation of function, variable, etc)
 :help OR <f1>
 <c-w><c-w> - jump between current buffer and help buffer
 <c-6> (aka <c-^) - jump to alternate file
@@ -76,6 +76,8 @@ Misc
 <c-d> OR <tab> - command completions
 Telescope plugin is a fuzzy finder (e.g <leader>sh)
 	Telescope keymappings/shortcuts are defined within config function in init.lua
+	<c-v> - vertical split
+	<c-x> - horizontal split
 LSP shortcuts defined in nvim-lspconfig plugin in init.lua
 	To see LSP's installed (and available) - ":Mason"
 	In mason popup, there are shortcuts to install, uninstall, etc. See help menu

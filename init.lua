@@ -234,8 +234,9 @@ vim.keymap.set('x', '<leader>p', [["_dP]])
 -- vim.keymap.set('n', '<leader>Y', [["+Y]])
 vim.keymap.set({ 'n', 'v' }, '<leader>d', '"_d')
 vim.keymap.set({ 'i', 'n', 'v', 'x' }, '<C-[>', '<Esc>')
-vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
-vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
+-- TODO - determine appropriate shortcuts for quickfix shortcuts below:
+-- vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
+-- vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
 vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
 vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
 vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Replace/substitute word under cursor throughout file' })
@@ -909,14 +910,32 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
-        opts = {},
+        -- opts = {},
+        config = function()
+          local ls = require 'luasnip'
+
+          vim.keymap.set({ 'i', 's' }, '<C-G>', function()
+            ls.expand()
+          end, { silent = true, desc = 'Luasnip - Jump forward' })
+          vim.keymap.set({ 'i', 's' }, '<C-J>', function()
+            ls.jump(1)
+          end, { silent = true, desc = 'Luasnip - Jump forward' })
+          vim.keymap.set({ 'i', 's' }, '<C-K>', function()
+            ls.jump(-1)
+          end, { silent = true, desc = 'Luasnip - Jump backward' })
+          vim.keymap.set({ 'i', 's' }, '<C-L>', function()
+            if ls.choice_active() then
+              ls.change_choice(1)
+            end
+          end, { silent = true, desc = 'Luasnip - Change choice' })
+        end,
       },
       'folke/lazydev.nvim',
     },
@@ -945,7 +964,7 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'default', -- https://cmp.saghen.dev/configuration/keymap#presets
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -964,7 +983,9 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        -- For 'lsp' to work - Update nvim-lspconfig with blink capabilities
+        -- 'buffer' - takes all tokens from from buffer you're currently in for autocomplete
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'buffer' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
