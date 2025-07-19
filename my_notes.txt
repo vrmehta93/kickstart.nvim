@@ -2,44 +2,31 @@
 Keys
 x - delete character
 D - equivalent of d$
-r - replace character
-R - replace motion
+r - replace one character
+R - replace mode
 c - change (delete motion and insert mode)
 s - delete character under cursor and go into insert mode
 S - delete line and go into insert mode. Equivalent of "cc"
 i/a - insert mode left/right side of block cursor
+I - insert mode at the first non-blank character of current line
+gI - insert mode at the column 1 of current line
 A - append text at the end of line
 p/P - put after/before cursor
 o/O - add line after/before cursor and insert mode
 u - undo change
 U - new change to undo the changes for current line
+<c-r> - redo change
+gu<motion>/gU<motion>/g~<motion> - make text lower/upper/toggle case
 f/F - forwards/backwards character search on a line. Cursor is on the character
 t/T - forwards/backwards character search on a line with cursor before/after the character (depending if you're going backwards or forwards)
-<c-r> - redo change
 :%s/<old>/<new>/gc - substitute command
 	- "%" means for the whole file. Replace with "#,#" for line numbers in file
 	- without "/gc" - first occurence
 	- with only "/g" - all occurences
 	- with only "/c" - ask for confirmation each time
 	- If you can run this in visual mode, it only affects selected lines
-^ - go to first non-blank character
-
-From The Primeagen - https://www.youtube.com/watch?v=uL9oOZStezw&list=PLeZYXXzdoLhxP0fxWnzzZqpof8Cj2SODL&index=4&ab_channel=ThePrimeagen
-= - auto indent
-	=ap - align entire paragraph
-NOTE - I don't like using vim-easymotion because if I have to use another editor, chances are there's a vim plugin for it and you can move around pretty fast with vim default motions
-><num><up/down motion> - indent num lines
-	e.g. >4j will indent 4 lines
-:LspStop - if you don't want to see LSP stuff
-<c-a> - increment number
-<c-x> - decrement number
-Substitute expression s/\(\w.*\)/data[0] = "\1";
-	Whatever is within \( and \) can be referenced as a parameter. e.g. \1
-	\w - Matches any word character (one character)
-	.* - Matches 0 or more characters
-g<c-a> after selecting text in visual mode - increments appropriately all selected numbers
-	This works even if you select whole lines with text on them
-	If you don't include "g", then all increment same number
+:s - repeat the last substitution command with the last used pattern and replacement string
+& - repeat last subtitute command
 
 Motions
 w/W - word forward
@@ -47,31 +34,118 @@ b/B - word backward
 e/E - word forward last character
 ge - word backward last character
 
+Text objects:
+s - sentence
+p - paragraph
+b/B - block/big block (i.e. "()"/"{}")
+
 Navigation
+^ - go to first non-blank character
 <c-d> - half page down
 <c-u> - half page up
 <c-f> - page down
 <c-b> - page up
 <c-e> - scroll down without moving cursor
 <c-y> - scroll up without moving cursor
+H - move cursor to top part of screen
+M - move cursor to the middle of the screen
+L - move cursor to the lower part of screen
 / or ? - forward/backward search
-<c-o>/<c-i> - go back/forward to where you were
+	n/N - go to next/previous search
+	gn/gN - go to next/previous search AND visually select
+<c-o>/<c-i> - go back/forward to where you were (relates to jumplist)
+	:jumps - shows jumplist (global)
+g;/g, - Go to previous/next change in the current buffer (relates to changelist)
+	:changes - shows changelist of current buffer
+`` (2 backticks) - jump to the last jump position within the current buffer
+gi - Go to the last position you were in insert mode AND go into insert mode
+zz - center current line in the window
+zt - move current line to top of window
+zb - move current line to the bottom of window
+
+Visual Mode
+u - change to lower case
+U - change to upper case
+~ - toggle case
+g<c-a> after selecting text in visual mode - increments appropriately all selected numbers
+	This works even if you select whole lines with text on them
+	If you don't include "g", then all increment same number
+
+Insert mode
+<c-h> - delete one character (equivalent of backspace)
+<c-w> - Delete word before cursor
+<c-u> - Delete all characters from beginning of line to cursor
+<c-i> - <tab>
+<c-m> - <CR>
+<c-t>/<c-d> - indent/unindent line
+<c-o> - Execute one normal mode command and then return to insert mode
+<c-v><key> - Insert literal character (<c-v><Esc>)
+<c-r><register> - insert contents of register
+<c-r>= - insert result of expression
 
 Other
 ggyG - yank whole file
+gv - re-select the last visual selection
 
 Help Navigation
 K - find/goto documentation of word under cursor (not just for help but also for LSPs to peek/preview documentation of function, variable, etc)
 :help OR <f1>
-<c-w><c-w> - jump between current buffer and help buffer
+<c-w><c-w> - jump between buffers
 <c-6> (aka <c-^) - jump to alternate file
+
+File explorer (Netrw)
+:Ex
+:Sex - horizontal split
+:Vex - vertical split
+Netrw commands:
+R - rename file/dir
+D - delete file/dir
+% - create new file
+a - toggle hidden files (dot files)
+s - change sort order
+P - open in parent window
+i - toggle listing style
+
+Buffers
+:ls or :buffers - list all buffers
+:bnext or :bn
+:bprevious or :bp
+:bdelete or :bd
+:bufdo <command> - Execute <command> on all listed buffers
+
+Registers
+TODO
+
+Macros
+TODO
+
+Marks
+TODO
+
+Command line mode/window
+q: - open command line window to edit and navigate history
+q/ - search in command line window
+q? - search backwards in command line window
+<c-a> - insert the last search pattern or replacement string
+Ex commands:
+	:w
+	:q
+	:s
+	:d
+	:g
+	:e
+:!<command> - execute external command
+	e.g. (select bunch of lines in visual mode) > :<,>!sort | unique
+	This sorts the lines and only keeps unique values
+!! - in command line mode with ":.!" (replace current line with output of command)
+External filter commands on visually selected lines:
+	sort
+	uniq
+	custom script (e.g. :<,>!python /path/to/script.py)
 
 Misc
 <c-g> - file location and status
 % - find matching parenthesis/bracket
-:!<command> - execute external command
-	e.g. (select bunch of lines in visual mode) > :<,>!sort | unique
-	This sorts the lines and only keeps unique values
 :r - read external file/command
 <c-d> OR <tab> - command completions
 Telescope plugin is a fuzzy finder (e.g <leader>sh)
@@ -88,19 +162,36 @@ Other helpful notes not included already in kickstarter's init.lua or Tutor
 In normal mode
 	ZZ - save and quit. Equivalent to :wq
 :LspInfo - to see what LSPs are active
-File explorer
-	:Ex
-	:Sex - horizontal split
-	:Vex - vertical split
-Buffers
-	:bnext or :bn
-	:bprevious or :bp
-	:bdelete or :bd
 To run a command in normal mode - :normal <commands> OR :norm
 	e.g. :normal iHello or :norm iHello
 gf - go to file
 gx - go to URL
+<c-x><c-f> - autocomplete filename
 :set spell spelllang=en_us - Enable spell check
 	z= - Place cursor underneath the highlighted word to see suggestions to fix
 	zg - Add word to dictionary
+:g/<pattern>/<command> - Execute <command> matching every line matching <pattern>
+	e.g. ':g/sometext/normal dd'
+:v/<command>/<pattern> - Execute <command> on every line NOT matching <pattern>
+Arguments list:
+	:args <file1> <file2> ... - set argument list
+	:next or :n
+	:previous or :prev
+	:first/:last
+	:argdo <command> - execute <command> on all files in argument list
+
+
+From The Primeagen - https://www.youtube.com/watch?v=uL9oOZStezw&list=PLeZYXXzdoLhxP0fxWnzzZqpof8Cj2SODL&index=4&ab_channel=ThePrimeagen
+= - auto indent
+=ap - align entire paragraph
+NOTE - I don't like using vim-easymotion because if I have to use another editor, chances are there's a vim plugin for it and you can move around pretty fast with vim default motions
+><num><up/down motion> - indent num lines
+e.g. >4j will indent 4 lines
+:LspStop - if you don't want to see LSP stuff
+<c-a> - increment number
+<c-x> - decrement number
+Substitute expression s/\(\w.*\)/data[0] = "\1";
+	Whatever is within \( and \) can be referenced as a parameter. e.g. \1
+	\w - Matches any word character (one character)
+	.* - Matches 0 or more characters
 
