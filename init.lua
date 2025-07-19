@@ -234,7 +234,7 @@ vim.keymap.set('x', '<leader>p', [["_dP]])
 -- vim.keymap.set('n', '<leader>Y', [["+Y]])
 vim.keymap.set({ 'n', 'v' }, '<leader>d', '"_d')
 vim.keymap.set({ 'i', 'n', 'v', 'x' }, '<C-[>', '<Esc>')
--- TODO - determine appropriate shortcuts for quickfix shortcuts below:
+-- TODO: determine appropriate shortcuts for quickfix shortcuts below:
 -- vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
 -- vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
 vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
@@ -463,8 +463,8 @@ require('lazy').setup({
           mappings = { -- See `:help telescope.mappings`
             i = { -- See `:help telescope.actions`
               ['<c-enter>'] = 'to_fuzzy_refine',
-              ['<C-[>'] = 'close', -- TODO - Determine how to go into normal mode
-              -- ['<C-BS>'] = '', -- TODO - Determine how to undo layers of fuzzy search
+              ['<C-[>'] = 'close', -- TODO: Determine how to go into normal mode
+              -- ['<C-BS>'] = '', -- TODO: Determine how to undo layers of fuzzy search
             },
           },
         },
@@ -527,7 +527,7 @@ require('lazy').setup({
         -- builtin.find_files { cwd = vim.fn.stdpath 'config' }
         -- end, { desc = '[S]earch [N]eovim files' })
         builtin.find_files {
-          cwd = '~/.dotfiles', -- TODO - Determine if ~ needs to be replaced with env var
+          cwd = '~/.dotfiles', -- TODO: Determine if ~ needs to be replaced with env var
           find_command = {
             'fd',
             '--type',
@@ -542,7 +542,7 @@ require('lazy').setup({
       -- Shortcut for searching your contents of Neovim configuration files
       vim.keymap.set('n', '<leader>sm', function()
         builtin.live_grep {
-          cwd = '~/.dotfiles', -- TODO - Determine if ~ needs to be replaced with env var
+          cwd = '~/.dotfiles', -- TODO: Determine if ~ needs to be replaced with env var
           additional_args = { '--hidden', '--glob', '!**/.git/*' }, -- since live_grep uses ripgrep/rg behind the scenes
         }
       end, { desc = '[S]earch [D]ot files by [G]rep' })
@@ -885,7 +885,7 @@ require('lazy').setup({
         end
       end,
       formatters_by_ft = {
-        -- NOTE - these formatters need to be installed via LSP/Mason
+        -- NOTE: these formatters need to be installed via LSP/Mason
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
@@ -1049,6 +1049,8 @@ require('lazy').setup({
       --  - va)  - [V]isually select [A]round [)]paren
       --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
       --  - ci'  - [C]hange [I]nside [']quote
+      --
+      --  Full list - https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-ai.md
       require('mini.ai').setup { n_lines = 500 }
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
