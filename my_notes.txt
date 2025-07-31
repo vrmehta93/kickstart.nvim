@@ -53,6 +53,8 @@ L - move cursor to the lower part of screen
 / or ? - forward/backward search
 	n/N - go to next/previous search
 	gn/gN - go to next/previous search AND visually select
+* or # - forward/backward search of WHOLE word under cursor
+g* or g# - forward/backward search of substring/partial word under cursor
 <c-o>/<c-i> - go back/forward to where you were (relates to jumplist)
 	:jumps - shows jumplist (global)
 g;/g, - Go to previous/next change in the current buffer (relates to changelist)
@@ -72,16 +74,27 @@ g<c-a> after selecting text in visual mode - increments appropriately all select
 	If you don't include "g", then all increment same number
 
 Insert mode
+<c-e> - copy character of line below, one character at a time
 <c-h> - delete one character (equivalent of backspace)
-<c-w> - Delete word before cursor
-<c-u> - Delete all characters from beginning of line to cursor
 <c-i> - <tab>
 <c-m> - <CR>
-<c-t>/<c-d> - indent/unindent line
 <c-o> - Execute one normal mode command and then return to insert mode
-<c-v><key> - Insert literal character (<c-v><Esc>)
 <c-r><register> - insert contents of register
 <c-r>= - insert result of expression
+<c-t>/<c-d> - indent/unindent line
+<c-u> - Delete all characters from beginning of line to cursor
+<c-v><key> - Insert literal character (<c-v><Esc>)
+<c-w> - Delete word before cursor
+
+Command line mode
+<c-f> - history
+<c-h> - delete one character (equivalent of backspace)
+<c-j>/<c-m> - <CR>
+<c-n>/<c-p> - move forward/backward through history
+<c-r><register> - insert contents of register
+<c-r>= - insert result of expression
+<c-u> - Delete all characters from beginning of line to cursor
+<c-w> - Delete word before cursor
 
 Other
 ggyG - yank whole file
@@ -179,7 +192,7 @@ Arguments list:
 	:previous or :prev
 	:first/:last
 	:argdo <command> - execute <command> on all files in argument list
-
+g-/g+ - undo tree functionality in vim. Unlike undotree plugin, there's no UI
 
 From The Primeagen - https://www.youtube.com/watch?v=uL9oOZStezw&list=PLeZYXXzdoLhxP0fxWnzzZqpof8Cj2SODL&index=4&ab_channel=ThePrimeagen
 = - auto indent

@@ -211,17 +211,19 @@ vim.keymap.set('n', '<C-S-k>', '<C-w>K', { desc = 'Move window to the upper' })
 
 -- NOTE - in iTerm2 (macOS), Go to Profiles > Edit Profile > Keys tab > General tab > For "Left/Right option key", set value to "Esc+" from "Normal"
 -- My mappings
-vim.keymap.set('n', '<leader>o', 'o<Esc>')
-vim.keymap.set('n', '<leader>O', 'O<Esc>')
+vim.keymap.set('n', '<leader>o', 'o<Esc>', { desc = 'Add new line below cursor and move cursor to new line' })
+vim.keymap.set('n', '<leader>O', 'O<Esc>', { desc = 'Add new line above cursor and move cursor to new line' })
+vim.keymap.set('n', '<leader>pc', ':<C-p>', { desc = 'Display only previous Command Line command' })
+vim.keymap.set('n', '<leader>pr', ':<C-p><CR>', { desc = 'Re-run previous Command Line command' })
 vim.keymap.set('n', '<leader>w', ':w<CR>', { desc = 'Write/Save file' })
-vim.keymap.set('n', '<leader>zx', ':q<CR>', { desc = 'Quit Neovim' })
+vim.keymap.set('n', '<leader>zx', ':q<CR>', { desc = 'Quit command' })
 -- ZZ - (normal mode only) save and exit aka :wq
 -- ZQ - quit without saving aka :q!
 -- To control the size of splits (height/width) (source TJ DeVries)
-vim.keymap.set('n', '<M-,>', '<Cmd>resize -5<CR>', { desc = 'Horizontal split: decrease height' })
-vim.keymap.set('n', '<M-.>', '<Cmd>resize +5<CR>', { desc = 'Horizontal split: increase height' })
-vim.keymap.set('n', '<M-t>', '<Cmd>vertical resize +5<CR>', { desc = 'Vertical split: increase width' })
-vim.keymap.set('n', '<M-s>', '<Cmd>vertical resize -5<CR>', { desc = 'Vertical split: decrease width' })
+vim.keymap.set('n', '<M-,>', '<Cmd>resize -5<CR>', { desc = 'Horizontal split/resize: decrease height' })
+vim.keymap.set('n', '<M-.>', '<Cmd>resize +5<CR>', { desc = 'Horizontal split/resize: increase height' })
+vim.keymap.set('n', '<M-t>', '<Cmd>vertical resize +5<CR>', { desc = 'Vertical split/resize: increase width' })
+vim.keymap.set('n', '<M-s>', '<Cmd>vertical resize -5<CR>', { desc = 'Vertical split/resize: decrease width' })
 -- From https://github.com/ThePrimeagen/init.lua/blob/master/lua/theprimeagen/remap.lua
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
@@ -429,6 +431,7 @@ require('lazy').setup({
         end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
+      'aznhe21/actions-preview.nvim', -- To show a preview of code actions. Used in keymap below
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
@@ -632,7 +635,8 @@ require('lazy').setup({
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
-          map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
+          -- map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
+          map('gra', require('actions-preview').code_actions, '[G]oto Code [A]ction', { 'n', 'x' })
 
           -- Find references for the word under your cursor.
           map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
