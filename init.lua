@@ -198,10 +198,10 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+-- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+-- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+-- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+-- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 vim.keymap.set('n', '<C-S-h>', '<C-w>H', { desc = 'Move window to the left' })
@@ -228,19 +228,19 @@ vim.keymap.set('n', '<M-s>', '<Cmd>vertical resize -5<CR>', { desc = 'Vertical s
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', 'n', 'nzzzv')
-vim.keymap.set('n', '=ap', "ma=ap'a")
 vim.keymap.set('n', 'N', 'Nzzzv')
+vim.keymap.set('n', '=ap', "ma=ap'a")
 vim.keymap.set('n', '<leader>zig', '<cmd>LspRestart<cr>')
 vim.keymap.set('x', '<leader>p', [["_dP]])
 --vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
 -- vim.keymap.set('n', '<leader>Y', [["+Y]])
 vim.keymap.set({ 'n', 'v' }, '<leader>d', '"_d')
 vim.keymap.set({ 'i', 'n', 'v', 'x' }, '<C-[>', '<Esc>')
--- TODO: determine appropriate shortcuts for quickfix shortcuts below:
--- vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
--- vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
-vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
-vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
+-- TODO: Determine if these quickfix and location list keymaps are still needed since there are already pre-defined shortcuts for them
+vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz', { desc = 'Quickfix list backwards/previous' })
+vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz', { desc = 'Quickfix list forward/next' })
+vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz', { desc = 'Location list forward/next' })
+vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz', { desc = 'Location list backwards/previous' })
 vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Replace/substitute word under cursor throughout file' })
 -- vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv") -- Overrides J (aka Join). Default join still works when not in visual mode (aka line cursor is on)

@@ -103,8 +103,6 @@ gv - re-select the last visual selection
 Help Navigation
 K - find/goto documentation of word under cursor (not just for help but also for LSPs to peek/preview documentation of function, variable, etc)
 :help OR <f1>
-<c-w><c-w> - jump between buffers
-<c-6> (aka <c-^) - jump to alternate file
 
 File explorer (Netrw)
 :Ex
@@ -119,12 +117,34 @@ s - change sort order
 P - open in parent window
 i - toggle listing style
 
-Buffers
+Buffers (starts with :b)
 :ls or :buffers - list all buffers
 :bnext or :bn
 :bprevious or :bp
 :bdelete or :bd
 :bufdo <command> - Execute <command> on all listed buffers
+<c-6> (aka <c-^) - jump to alternate file i.e. edited file. Same as running ":e #"
+
+Windows (starts with <c-w>)
+NOTE - For most of them, you can hold down <c> key. e.g. <c-w>w can be used as <c-w><c-w>
+<c-w><c-<navigation key>> - jump to <direction> buffer
+<c-w>w/W - cycle to next/previous window in layout order
+<c-w>p - Go to last accessed window
+<c-w>t - jump to top-left window
+<c-w>b - jump to bottom-right window
+<c-w>v - vertical split of current buffer
+<c-w>s - horizontal split of current buffer
+<c-w>+/- - increase/decrease window height
+<c-w>>/< - increase/decrease window width
+<c-w>= - make all windows equal size
+<c-w>r/R - rotate windows down-right/up-left
+<c-w>x - move current buffer to the left side of window layout
+<c-w>n - open new empty window
+<c-w>_/| - maximize height/width
+<c-w>T - breakout into a new tab
+
+Tabs
+gt/T - go to next/previous tab. Equivalent of :tabnext/tabprev
 
 Registers
 TODO
@@ -133,6 +153,12 @@ Macros
 TODO
 
 Marks
+TODO
+
+Quickfix List (starts with :c)
+TODO
+
+Location list (starts with :l)
 TODO
 
 Command line mode/window
@@ -163,7 +189,7 @@ Misc
 <c-d> OR <tab> - command completions
 Telescope plugin is a fuzzy finder (e.g <leader>sh)
 	Telescope keymappings/shortcuts are defined within config function in init.lua
-	<c-v> - vertical split
+	<c-v> - vertical slit
 	<c-x> - horizontal split
 LSP shortcuts defined in nvim-lspconfig plugin in init.lua
 	To see LSP's installed (and available) - ":Mason"
@@ -174,6 +200,7 @@ Other helpful notes not included already in kickstarter's init.lua or Tutor
 :lua <lua code to execute> - To run lua code
 In normal mode
 	ZZ - save and quit. Equivalent to :wq
+	ZQ - quit without writing. Equivalent of :q!
 :LspInfo - to see what LSPs are active
 To run a command in normal mode - :normal <commands> OR :norm
 	e.g. :normal iHello or :norm iHello
