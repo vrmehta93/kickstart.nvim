@@ -542,10 +542,10 @@ require('lazy').setup({
         }
       end, { desc = '[S]earch [D]ot files' })
 
-      -- Shortcut for searching your contents of Neovim configuration files
+      -- Shortcut for searching your contents of all personal configuration files/notes
       vim.keymap.set('n', '<leader>sm', function()
         builtin.live_grep {
-          cwd = '~/.dotfiles', -- TODO: Determine if ~ needs to be replaced with env var
+          cwd = '~/.dotfiles',
           additional_args = { '--hidden', '--glob', '!**/.git/*' }, -- since live_grep uses ripgrep/rg behind the scenes
         }
       end, { desc = '[S]earch [D]ot files by [G]rep' })

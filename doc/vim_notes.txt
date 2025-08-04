@@ -11,6 +11,9 @@ i/a - insert mode left/right side of block cursor
 I - insert mode at the first non-blank character of current line
 gI - insert mode at the column 1 of current line
 A - append text at the end of line
+y - yank
+Y - yank from cursor to end of line
+yy - yank entire line
 p/P - put after/before cursor
 o/O - add line after/before cursor and insert mode
 u - undo change
@@ -145,11 +148,24 @@ NOTE - For most of them, you can hold down <c> key. e.g. <c-w>w can be used as <
 Tabs
 gt/T - go to next/previous tab. Equivalent of :tabnext/tabprev
 
-Registers
-TODO
-
-Macros
-TODO
+Registers/Macros
+q{a-z} - start recording into {a-z} register
+	q - stop recording
+q{A-Z} - append to existing register
+Q - repeat the last recorded register
+@{a-z} - play macro from {a-z} register
+@@ - replay last-run macro
+{count}@{a-z} - replay macro in {a-z} register {count} times
+:{range}normal @{a-z} - run macro on each line in range
+:reg - show registers and content
+	:register
+	:registers
+	:reg(ister(s)) {a-z}
+:put {a-z} - paste macro into buffer
+:let @{a-z} = '<macro commands>' - edit a macro manually
+"{a-z}y<motion> - yank to register e.g. "ay$
+	In visual mode after selecting text - "{a-z}y
+"{a-z}p - paste register content
 
 Marks
 TODO
@@ -164,6 +180,15 @@ Jumplist
 TODO
 <c-o>/<c-i> - go back/forward to where you were (relates to jumplist)
 	:jumps - shows jumplist (global)
+
+Fold (starts with z)
+zf<textobject> - fold selected lines
+zd - delete fold
+zo/c - open/close fold again
+zR/M - recursively open/close fold
+:mkview - save and persist folds
+:loadview - load persisted folds
+:set foldmethod [manual (default), indent, etc]
 
 Command line mode/window
 q: - open command line window to edit and navigate history
@@ -189,7 +214,7 @@ External filter commands on visually selected lines:
 Misc
 <c-g> - file location and status
 % - find matching parenthesis/bracket
-:r - read external file/command
+:r(ead) - read external file/command
 <c-d> OR <tab> - command completions
 
 Other helpful notes not included already in kickstarter's init.lua or Tutor
@@ -215,6 +240,7 @@ Arguments list:
 	:first/:last
 	:argdo <command> - execute <command> on all files in argument list
 g-/g+ - undo tree functionality in vim. Unlike undotree plugin, there's no UI
+:vim(grep) - vim's internal grep. Search for pattern in files
 
 From The Primeagen - https://www.youtube.com/watch?v=uL9oOZStezw&list=PLeZYXXzdoLhxP0fxWnzzZqpof8Cj2SODL&index=4&ab_channel=ThePrimeagen
 = - auto indent

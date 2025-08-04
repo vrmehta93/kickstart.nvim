@@ -1,6 +1,8 @@
 -- Source https://github.com/tjdevries/config.nvim/blob/master/lua/custom/plugins/oil.lua
 -- https://github.com/stevearc/oil.nvim?tab=readme-ov-file#installation
 
+-- Shortcuts list - g?
+-- NOTE: oil.nvim turns off netrw by default
 return {
   {
     -- :help Oil
@@ -22,6 +24,8 @@ return {
     --   }
     -- end,
     opts = {
+      delete_to_trash = true, -- NOTE: On Mac - give full disk access to terminal emulator to write to .Trash dir
+      skip_confirm_for_simple_edits = true,
       view_options = {
         -- Show files and directories that start with "."
         show_hidden = true,
