@@ -16,23 +16,29 @@ Y - yank from cursor to end of line
 yy - yank entire line
 p/P - put after/before cursor
 o/O - add line after/before cursor and insert mode
+J - join line below with the current line with a space between
+gJ - join line below with the current line with NO space between
 u - undo change
 U - new change to undo the changes for current line
 <c-r> - redo change
 gu<motion>/gU<motion>/g~<motion> - make text lower/upper/toggle case
+	gUU/guu - make the whole line uppercase/lowercase
 f/F - forwards/backwards character search on a line. Cursor is on the character
 	;/, - go forward/backwards in search
 t/T - forwards/backwards character search on a line with cursor before/after the character (depending if you're going backwards or forwards)
 :%s/<old>/<new>/gc - substitute command
 	- "%" means for the whole file. Replace with "#,#" for line numbers in file
+		- OR visually select text and run : and it will show up as :'<,'>
 	- without "/gc" - first occurence
 	- with only "/g" - all occurences
 	- with only "/c" - ask for confirmation each time
 	- If you can run this in visual mode, it only affects selected lines
+	Post running substitute command
+		- g& - redo your substitution to entire file
 :s - repeat the last substitution command with the last used pattern and replacement string
 & - repeat last subtitute command
 
-Motions
+Simple Motions
 w/W - word forward
 b/B - word backward
 e/E - word forward last character
@@ -43,7 +49,11 @@ s - sentence
 p - paragraph
 b/B - block/big block (i.e. "()"/"{}")
 
-Navigation
+Navigation/Motions
+Wrapped lines:
+	g0
+	g$
+	gj/gk
 ^ - go to first non-blank character
 <c-d> - half page down
 <c-u> - half page up
@@ -63,11 +73,17 @@ g;/g, - Go to previous/next change in the current buffer (relates to changelist)
 	:changes - shows changelist of current buffer
 `` (2 backticks) - jump to the last jump position within the current buffer
 gi - Go to the last position you were in insert mode AND go into insert mode
+'. - move cursor to where the last change began (special mark)
 zz - center current line in the window
 zt - move current line to top of window
 zb - move current line to the bottom of window
+% - find matching parenthesis/bracket
+{ - beginning of paragraph
+} - end of paragraph
+
 
 Visual Mode
+gv - re-select the last visual selection
 u - change to lower case
 U - change to upper case
 ~ - toggle case
@@ -97,10 +113,33 @@ Command line mode
 <c-r>= - insert result of expression
 <c-u> - Delete all characters from beginning of line to cursor
 <c-w> - Delete word before cursor
+<c-r><c-l> - paste current line to command line
+@: - re-run last command
+Modifiers:
+	% - current file name and path relative to parent project
+	%:r - current file root name (without extension)
+	%:e - current file's extension only
+	%:p - absolute path of file
+	%:h - directory of current file
+	%:t - only file name
+Commands:
+	echo
+	expand
+		e.g. :echo expand('%:p')
+	vim(grep)
+	verbose
+		e.g. :verbose nmap <space><space>
+
+Vim's built-in terminal
+:term
+i - Go into terminal mode (similar to insert mode)
+<c-\><c-n> - In normal mode inside terminal and now you can navigate around like it's a normal buffer
+
 
 Other
 ggyG - yank whole file
-gv - re-select the last visual selection
+gg=G - re-indent the whole file
+gq - only wrapped lines where words are wrapping to next line
 
 Help Navigation
 K - find/goto documentation of word under cursor (not just for help but also for LSPs to peek/preview documentation of function, variable, etc)
@@ -118,6 +157,8 @@ a - toggle hidden files (dot files)
 s - change sort order
 P - open in parent window
 i - toggle listing style
+v - vertical split
+o - horizontal split
 
 Buffers (starts with :b)
 :ls or :buffers - list all buffers
@@ -166,9 +207,22 @@ Q - repeat the last recorded register
 "{a-z}y<motion> - yank to register e.g. "ay$
 	In visual mode after selecting text - "{a-z}y
 "{a-z}p - paste register content
+Special registers:
+	% - contains filename
+If you're recording a macro for a very big file where macro involves big jumps of going up and down, you might notice that macro replaying very slowly
+	That's because there's a lot of re-rendering of screen
+	To speed it up - :set lazyredraw
 
 Marks
-TODO
+m{a-z} - create a mark (within file)
+m{A-Z} - create marks between files (global) 
+'{a-zA-Z} - return to a mark at the beginning of the line
+`{a-zA-Z} - return to a mark on the same column
+:marks - see list of marks
+:marks {marks} - show specific mark
+:delmarks {marks} - delete mark
+	or :delm
+:delm! - delete all lowercase marks
 
 Quickfix List (starts with :c)
 TODO
@@ -210,12 +264,28 @@ External filter commands on visually selected lines:
 	sort
 	uniq
 	custom script (e.g. :<,>!python /path/to/script.py)
+	jq .
+
+Global command
+gf - go to file
+gx - go to URL
+:g/<pattern>/<command> - Execute <command> matching every line matching <pattern>
+	e.g. ':g/sometext/normal dd'
+	If <command> is not listed, default is "p" which is print
+	<commands>:
+		d - delete
+		p - print
+:v/<command>/<pattern> - Execute <command> on every line NOT matching <pattern>
+	Equivalent would be g!. e.g. g/sum/d vs g!/sum/d (deletes all words "sum")
+g-/g+ - undo tree functionality in vim. Unlike undotree plugin, there's no UI
+ga - get character encoding (ascii) info
 
 Misc
 <c-g> - file location and status
-% - find matching parenthesis/bracket
 :r(ead) - read external file/command
 <c-d> OR <tab> - command completions
+<c-k>{char} - special character
+	:digraph to see list of special characters available
 
 Other helpful notes not included already in kickstarter's init.lua or Tutor
 :lua <lua code to execute> - To run lua code
@@ -224,23 +294,42 @@ In normal mode
 	ZQ - quit without writing. Equivalent of :q!
 To run a command in normal mode - :normal <commands> OR :norm
 	e.g. :normal iHello or :norm iHello
-gf - go to file
-gx - go to URL
 <c-x><c-f> - autocomplete filename
 :set spell spelllang=en_us - Enable spell check
 	z= - Place cursor underneath the highlighted word to see suggestions to fix
 	zg - Add word to dictionary
-:g/<pattern>/<command> - Execute <command> matching every line matching <pattern>
-	e.g. ':g/sometext/normal dd'
-:v/<command>/<pattern> - Execute <command> on every line NOT matching <pattern>
 Arguments list:
 	:args <file1> <file2> ... - set argument list
 	:next or :n
 	:previous or :prev
 	:first/:last
 	:argdo <command> - execute <command> on all files in argument list
-g-/g+ - undo tree functionality in vim. Unlike undotree plugin, there's no UI
 :vim(grep) - vim's internal grep. Search for pattern in files
+To compare 2 files:
+	open vim/neovim with -d flag. e.g. vim -d file1 file2
+	If already inside vim/neovim, ":windo diffthis"
+To encrypt a file in vim, open file, make your edits and run :X
+	That will prompt you to enter an encryption key
+	To remove encryption, open the file and run :X again. If new encryption key is empty, it will unencrypt
+Sessions - save your open buffers so that you can re-open them again after exiting vim
+	To create - :mksession <session_name>
+	To load session in vim - :source <session_name>
+Vim's "find" command
+	Append "**" to vim's "path" var (e.g. set path+=**) to allow recursive searching
+	Open vim in project root dir so that "find" command to find your files
+
+https://www.youtube.com/watch?v=XA2WjJbmmoM&t=4108s&ab_channel=thoughtbot
+Tags
+	Run from project root - "!ctags -R ." to generate tags file
+	Vim default is configured to look for a tags file ("set tags?")
+	Now you can use vim's tag commands to search through your source files
+		<c-]> - jump to tag under cursor
+		g<c-]> - for ambiguous tags
+		<c-t> - jump up the tag stack
+	If your code has been updated. You would need to create another tag file. ctags is easy enough where you can update it without much trouble
+		You can also set it up where it autogenerates it after saving a
+		file/write command
+Vim's built-in autocomplete is really good - :h ins-completions
 
 From The Primeagen - https://www.youtube.com/watch?v=uL9oOZStezw&list=PLeZYXXzdoLhxP0fxWnzzZqpof8Cj2SODL&index=4&ab_channel=ThePrimeagen
 = - auto indent

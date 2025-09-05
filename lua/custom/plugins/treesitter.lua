@@ -1,7 +1,7 @@
 -- Mappings for treesitter context
-vim.keymap.set('n', '[c', function()
+vim.keymap.set('n', '[c', function() -- TODO: Determine what this does and confirm there's no conflict
   require('treesitter-context').go_to_context(vim.v.count1)
-end, { silent = true })
+end, { silent = true, desc = 'treesitter-context go_to_context' })
 
 return {
   { -- Highlight, edit, and navigate code
@@ -75,9 +75,9 @@ return {
 
           keymaps = {
             -- You can use the capture groups defined in textobjects.scm
-            ['af'] = '@function.outer',
-            ['if'] = '@function.inner',
-            ['ac'] = '@class.outer',
+            ['af'] = { query = '@function.outer', desc = 'Select outer part of a function' },
+            ['if'] = { query = '@function.inner', desc = 'Select inner part of a function' },
+            ['ac'] = { query = '@class.outer', desc = 'Select outer part of a class' },
             -- You can optionally set descriptions to the mappings (used in the desc parameter of
             -- nvim_buf_set_keymap) which plugins like which-key display
             ['ic'] = { query = '@class.inner', desc = 'Select inner part of a class region' },

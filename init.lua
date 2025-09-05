@@ -209,7 +209,6 @@ vim.keymap.set('n', '<C-S-l>', '<C-w>L', { desc = 'Move window to the right' })
 vim.keymap.set('n', '<C-S-j>', '<C-w>J', { desc = 'Move window to the lower' })
 vim.keymap.set('n', '<C-S-k>', '<C-w>K', { desc = 'Move window to the upper' })
 
--- NOTE - in iTerm2 (macOS), Go to Profiles > Edit Profile > Keys tab > General tab > For "Left/Right option key", set value to "Esc+" from "Normal"
 -- My mappings
 vim.keymap.set('n', '<leader>o', 'o<Esc>', { desc = 'Add new line below cursor and move cursor to new line' })
 vim.keymap.set('n', '<leader>O', 'O<Esc>', { desc = 'Add new line above cursor and move cursor to new line' })
@@ -217,8 +216,10 @@ vim.keymap.set('n', '<leader>pc', ':<C-p>', { desc = 'Display only previous Comm
 vim.keymap.set('n', '<leader>pr', ':<C-p><CR>', { desc = 'Re-run previous Command Line command' })
 vim.keymap.set('n', '<leader>w', ':w<CR>', { desc = 'Write/Save file' })
 vim.keymap.set('n', '<leader>zx', ':q<CR>', { desc = 'Quit command' })
--- ZZ - (normal mode only) save and exit aka :wq
--- ZQ - quit without saving aka :q!
+
+-- Insert mode mappings
+vim.keymap.set('i', '<C-CR>', '<Esc>o', { desc = 'In insert mode - add new line below cursor and move cursor to new line' })
+
 -- To control the size of splits (height/width) (source TJ DeVries)
 vim.keymap.set('n', '<M-,>', '<Cmd>resize -5<CR>', { desc = 'Horizontal split/resize: decrease height' })
 vim.keymap.set('n', '<M-.>', '<Cmd>resize +5<CR>', { desc = 'Horizontal split/resize: increase height' })
