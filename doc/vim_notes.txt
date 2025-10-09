@@ -23,20 +23,63 @@ U - new change to undo the changes for current line
 <c-r> - redo change
 gu<motion>/gU<motion>/g~<motion> - make text lower/upper/toggle case
 	gUU/guu - make the whole line uppercase/lowercase
+
+Search and replace
 f/F - forwards/backwards character search on a line. Cursor is on the character
 	;/, - go forward/backwards in search
 t/T - forwards/backwards character search on a line with cursor before/after the character (depending if you're going backwards or forwards)
-:%s/<old>/<new>/gc - substitute command
-	- "%" means for the whole file. Replace with "#,#" for line numbers in file
+Substitute command - :[range]s[ubstitute]/{search pattern}/{replacement string}/[flags] [count]
+	range - e.g. %
+		- "%" means for the whole file. Replace with "#,#" for line numbers in file
 		- OR visually select text and run : and it will show up as :'<,'>
-	- without "/gc" - first occurence
-	- with only "/g" - all occurences
-	- with only "/c" - ask for confirmation each time
-	- If you can run this in visual mode, it only affects selected lines
+		- If you can run this in visual mode, it only affects selected lines
+		- Default range is current line (i.e. ".")
+	search pattern - string or regex, including atoms
+	replacement string
+		\= - execute an actual function
+			e.g. :%s/\v(\d+)/\=reverse(submatch(0)) - reverse the order of the digits
+				submatch - refers to capture group
+	flags:
+		- without any flags - first occurence
+		- with only "/g" - all occurences within specified range
+		- with only "/c" - ask for confirmation each time
 	Post running substitute command
 		- g& - redo your substitution to entire file
+	To do consecutive substitutions, use pipe '|'
+		e.g. %s/... |  %s/...
 :s - repeat the last substitution command with the last used pattern and replacement string
 & - repeat last subtitute command
+
+Regex
+	Character classes
+		'[bp]le' matches 'ble' or 'ple'
+	Anchors
+		'^apple' - matches lines starting with 'apple'
+		'pie\$' - matches lines that end with 'pie'
+	Quantifiers and Atoms (common ones)
+		{n} - atoms can be counted
+			e.g. {4,} - 4 or more
+		'.' - matches any single character
+		'.*' - matches zero or more of any character
+		'.+' - matches one or more of any character
+		'()' - capture group
+		'\w' - matches any word character
+		'\d' - digits
+		'\s' - whitespace
+		'\S' - everything that's not a whitespace
+		'\v' - very magic mode
+		'\r' - newline
+	Capture groups
+		:s/\old/&-append-something - append '-append-something' to search string
+		:s/"\(.*\)"/\1 - removing surrounding "" from string
+		:s/\v(\d+)-(\d+)/\2-\1 - swap positions of 2 number groups around '-'
+	Advanced
+		\zs - pattern to find position but only include what comes AFTER match
+		\ze - pattern to find position but only include what comes BEFORE match
+		e.g :s/\vstart\zs.*\zeend/replace - replace text between 'start' and 'end' i.e. replace without including search words
+	Visual selection
+		Typically when you visually select and type ":", it runs the search on the lines
+		If you want to restrict search to visually selected (when not line-wise), use \%V
 
 Simple Motions
 w/W - word forward
@@ -126,9 +169,37 @@ Commands:
 	echo
 	expand
 		e.g. :echo expand('%:p')
-	vim(grep)
+	vim[grep] - vim's internal grep. Search for pattern in files
+		e.g. vimgrep /apple/ **/*.md - search for 'apple' pattern in all markdown files recursively
 	verbose
 		e.g. :verbose nmap <space><space>
+
+Command line mode/window
+q: - open command line window to edit and navigate history
+q/ - search in command line window
+q? - search backwards in command line window
+<c-a> - insert the last search pattern or replacement string
+Ex commands:
+	:w
+	:q
+	:s
+	:d
+	:g
+	:e
+:!<command> - execute external command
+e.g. (select bunch of lines in visual mode) > :<,>!sort | unique
+This sorts the lines and only keeps unique values
+:.!<command> - replace current line with command output
+!! - in command line mode with ":.!" (replace current line with output of command)
+:r !<command> - execute command and insert output below cursor
+:w !<command> - send current buffer as stdin to command
+:%!<command> - replace entire buffer with command output
+:'<,'>!<command> - replace selection with command output
+External filter commands on visually selected lines:
+	sort
+	uniq
+	custom script (e.g. :<,>!python /path/to/script.py)
+	jq . (format JSON)
 
 Vim's built-in terminal
 :term
@@ -226,6 +297,8 @@ m{A-Z} - create marks between files (global)
 
 Quickfix List (starts with :c)
 TODO
+cfdo <command> - Run command in each file in quickfix list
+	e.g. cfdo g/apple/d | upate - delete lines matching 'apple' and save changes
 
 Location list (starts with :l)
 TODO
@@ -243,28 +316,6 @@ zR/M - recursively open/close fold
 :mkview - save and persist folds
 :loadview - load persisted folds
 :set foldmethod [manual (default), indent, etc]
-
-Command line mode/window
-q: - open command line window to edit and navigate history
-q/ - search in command line window
-q? - search backwards in command line window
-<c-a> - insert the last search pattern or replacement string
-Ex commands:
-	:w
-	:q
-	:s
-	:d
-	:g
-	:e
-:!<command> - execute external command
-	e.g. (select bunch of lines in visual mode) > :<,>!sort | unique
-	This sorts the lines and only keeps unique values
-!! - in command line mode with ":.!" (replace current line with output of command)
-External filter commands on visually selected lines:
-	sort
-	uniq
-	custom script (e.g. :<,>!python /path/to/script.py)
-	jq .
 
 Global command
 gf - go to file
@@ -294,17 +345,18 @@ In normal mode
 	ZQ - quit without writing. Equivalent of :q!
 To run a command in normal mode - :normal <commands> OR :norm
 	e.g. :normal iHello or :norm iHello
+	e.g. :%norm! f x - On all lines, find " " and delete that character
+		"!" in "norm!" - it's possible that you have a lot of customizations that override commands like 'f'. So when you use "!", you're telling vim to interpret that as normal/regular vim keys i.e. use traditional 'f'
 <c-x><c-f> - autocomplete filename
 :set spell spelllang=en_us - Enable spell check
 	z= - Place cursor underneath the highlighted word to see suggestions to fix
 	zg - Add word to dictionary
 Arguments list:
-	:args <file1> <file2> ... - set argument list
 	:next or :n
 	:previous or :prev
 	:first/:last
+	:args <file1> <file2> ... - set argument list
 	:argdo <command> - execute <command> on all files in argument list
-:vim(grep) - vim's internal grep. Search for pattern in files
 To compare 2 files:
 	open vim/neovim with -d flag. e.g. vim -d file1 file2
 	If already inside vim/neovim, ":windo diffthis"

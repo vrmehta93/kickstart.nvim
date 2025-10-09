@@ -244,8 +244,9 @@ vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz', { desc = 'Location list for
 vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz', { desc = 'Location list backwards/previous' })
 vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Replace/substitute word under cursor throughout file' })
 -- vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv") -- Overrides J (aka Join). Default join still works when not in visual mode (aka line cursor is on)
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move visually selection down by one line' }) -- Overrides J (aka Join). Default join still works when not in visual mode (aka line cursor is on)
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move visually selection up by one line' })
+vim.keymap.set('n', '<leader>gp', '`[v`]', { desc = 'Visually select pasted (or previously changed) text' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -507,6 +508,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
       vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch existing commands' })
+      vim.keymap.set('i', '<C-p>', builtin.registers, { desc = '[S]earch registers' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -531,7 +533,7 @@ require('lazy').setup({
         -- builtin.find_files { cwd = vim.fn.stdpath 'config' }
         -- end, { desc = '[S]earch [N]eovim files' })
         builtin.find_files {
-          cwd = '~/.dotfiles', -- TODO: Determine if ~ needs to be replaced with env var
+          cwd = '~/.dotfiles',
           find_command = {
             'fd',
             '--type',
