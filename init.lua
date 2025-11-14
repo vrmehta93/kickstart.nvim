@@ -169,6 +169,7 @@ vim.o.confirm = true
 
 -- MY OPTIONS
 vim.o.backup = false
+vim.opt.path:append '**'
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`

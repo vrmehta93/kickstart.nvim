@@ -36,17 +36,20 @@ Substitute command - :[range]s[ubstitute]/{search pattern}/{replacement string}/
 		- Default range is current line (i.e. ".")
 	search pattern - string or regex, including atoms
 	replacement string
-		\= - execute an actual function
+		\= - execute an actual function/expression
 			e.g. :%s/\v(\d+)/\=reverse(submatch(0)) - reverse the order of the digits
 				submatch - refers to capture group
 	flags:
 		- without any flags - first occurence
 		- with only "/g" - all occurences within specified range
 		- with only "/c" - ask for confirmation each time
+	count example:
+		:s/.*/#include &/4 - Perform substitution on 4 lines starting at current line
 	Post running substitute command
 		- g& - redo your substitution to entire file
 	To do consecutive substitutions, use pipe '|'
 		e.g. %s/... |  %s/...
+	substitution vs macros - Typically substitution for single line and macros for multiple lines
 :s - repeat the last substitution command with the last used pattern and replacement string
 & - repeat last subtitute command
 
@@ -256,11 +259,15 @@ NOTE - For most of them, you can hold down <c> key. e.g. <c-w>w can be used as <
 <c-w>n - open new empty window
 <c-w>_/| - maximize height/width
 <c-w>T - breakout into a new tab
+:windo <command> - execute <command> on windows
 
 Tabs
 gt/T - go to next/previous tab. Equivalent of :tabnext/tabprev
 
 Registers/Macros
+Macros vs dot (".") command
+	"." - repeats the last change (single action)
+	Macros - repeat complex, multi-step/multi-line operations
 q{a-z} - start recording into {a-z} register
 	q - stop recording
 q{A-Z} - append to existing register
@@ -283,6 +290,17 @@ Special registers:
 If you're recording a macro for a very big file where macro involves big jumps of going up and down, you might notice that macro replaying very slowly
 	That's because there's a lot of re-rendering of screen
 	To speed it up - :set lazyredraw
+To clear a register (e.g. register q) with lua - let @q=''
+	OR qqq
+Global execution
+	If you have a multi line macro in q register and you run 4@q, something weird might happen if you didn't prep macro for next line (e.g. adding j at the end of macro to go to next line)
+	This is because you're adding lines to the macro while we run the macro which changes the order of the lines
+	To circumvent we use global execution which is a cool way to execute commands over text
+	Visually select your lines, then run in command line - :'<,'>g/^/norm! @q
+		Instead of using "^", you can perform a search so you can match a pattern and then on each line found, execute this pattern
+Special note
+	Recursive macros - macros that call themselves. They're really finicky and they can backfire
+	Joining macros together - You can take macros from various registers and glue them together. Same problem - they work but you often have to troubleshoot it and if you have to spend so much time gluing macros together, then it's easier to change it by hand
 
 Marks
 m{a-z} - create a mark (within file)
@@ -337,8 +355,6 @@ Misc
 <c-d> OR <tab> - command completions
 <c-k>{char} - special character
 	:digraph to see list of special characters available
-
-Other helpful notes not included already in kickstarter's init.lua or Tutor
 :lua <lua code to execute> - To run lua code
 In normal mode
 	ZZ - save and quit. Equivalent to :wq
@@ -357,18 +373,42 @@ Arguments list:
 	:first/:last
 	:args <file1> <file2> ... - set argument list
 	:argdo <command> - execute <command> on all files in argument list
+		e.g. argdo normal @a - applies macro "a" to all files in argument list
 To compare 2 files:
 	open vim/neovim with -d flag. e.g. vim -d file1 file2
 	If already inside vim/neovim, ":windo diffthis"
+	Or vimdiff command for vim only
+	Useful commands:
+		[c/]c for navigating through differences 
+		do - bring change from other file to current file
+		dp - put change from current file to other file
+		diffthis
+		diffoff
 To encrypt a file in vim, open file, make your edits and run :X
 	That will prompt you to enter an encryption key
 	To remove encryption, open the file and run :X again. If new encryption key is empty, it will unencrypt
 Sessions - save your open buffers so that you can re-open them again after exiting vim
 	To create - :mksession <session_name>
 	To load session in vim - :source <session_name>
-Vim's "find" command
+	To load session from terminal - nvim -S <session path>
+	To see which session within neovim - ":echo v:this_session"
+	Autocommand - :h SessionLoadPost
+	:h shada
+Vim's "find" command (alternative to "fzf" command)
+	":h starstar"
 	Append "**" to vim's "path" var (e.g. set path+=**) to allow recursive searching
 	Open vim in project root dir so that "find" command to find your files
+	To open file in split:
+		horizontal split - :sfind <file>
+		vertical split - :vertical sfind <file>
+To use vim/neovim for man pages (aka as manpager)
+	By default, man uses "less"
+	Inside vim - ":Man <page/command>"
+		You can also use tag navigation (e.g when you see "ctype")
+	Within terminal, you have to set:
+		neovim - "export MANPAGER='nvim +Man!'"
+		vim - "export MANPAGER='vim +MANPAGER --not-a-term -'"
+
 
 https://www.youtube.com/watch?v=XA2WjJbmmoM&t=4108s&ab_channel=thoughtbot
 Tags
@@ -395,4 +435,19 @@ Substitute expression s/\(\w.*\)/data[0] = "\1";
 	Whatever is within \( and \) can be referenced as a parameter. e.g. \1
 	\w - Matches any word character (one character)
 	.* - Matches 0 or more characters
+
+Fun/Useless commands:
+	g?<motion> e.g. g?G
+		encodes ROT13 encryption. NOT VERY SECURE
+		Shifts letters by 13 positions
+	:smile
+	:h 42 - reference to Hitchhiker's guide to galaxy
+	Monty Python movie references:
+		:h holy-grail
+		(vim only) :Ni!
+	:h |
+	:h[elp]!
+	(neovim only) :Telescope planets
+	:h UserGettingBored
+		Vim plugin for more fun - https://github.com/mikesmithgh/ugbi
 
