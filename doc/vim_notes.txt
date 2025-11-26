@@ -138,6 +138,7 @@ g<c-a> after selecting text in visual mode - increments appropriately all select
 	If you don't include "g", then all increment same number
 
 Insert mode
+<c-a> - Insert previously inserted text
 <c-e> - copy character of line below, one character at a time
 <c-h> - delete one character (equivalent of backspace)
 <c-i> - <tab>
@@ -149,6 +150,9 @@ Insert mode
 <c-u> - Delete all characters from beginning of line to cursor
 <c-v><key> - Insert literal character (<c-v><Esc>)
 <c-w> - Delete word before cursor
+<c-x> - go into special completion mode. ":h ins-completion"
+	<c-f> - file names
+	<c-l> - lines
 
 Command line mode
 <c-f> - history
@@ -422,6 +426,7 @@ Tags
 		You can also set it up where it autogenerates it after saving a
 		file/write command
 Vim's built-in autocomplete is really good - :h ins-completions
+	<c-x> in insert mode - enter a sub-mode for keyword completion
 
 From The Primeagen - https://www.youtube.com/watch?v=uL9oOZStezw&list=PLeZYXXzdoLhxP0fxWnzzZqpof8Cj2SODL&index=4&ab_channel=ThePrimeagen
 = - auto indent
@@ -445,9 +450,14 @@ Fun/Useless commands:
 	Monty Python movie references:
 		:h holy-grail
 		(vim only) :Ni!
-	:h |
+	:h | or :h bar
 	:h[elp]!
 	(neovim only) :Telescope planets
 	:h UserGettingBored
 		Vim plugin for more fun - https://github.com/mikesmithgh/ugbi
+	Subtle ones
+		:h nunmap
+		:h showmatch
+		(vim only):h spoon
+		(vim only):h howto
 
