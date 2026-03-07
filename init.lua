@@ -158,6 +158,7 @@ vim.o.inccommand = 'split'
 
 -- Show which line your cursor is on
 vim.o.cursorline = true
+vim.opt.cursorcolumn = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 10
@@ -188,12 +189,6 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-
--- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -234,19 +229,9 @@ vim.keymap.set('n', 'N', 'Nzzzv')
 vim.keymap.set('n', '=ap', "ma=ap'a")
 vim.keymap.set('n', '<leader>zig', '<cmd>LspRestart<cr>')
 vim.keymap.set('x', '<leader>p', [["_dP]])
---vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
--- vim.keymap.set('n', '<leader>Y', [["+Y]])
 vim.keymap.set({ 'n', 'v' }, '<leader>d', '"_d')
 vim.keymap.set({ 'i', 'n', 'v', 'x' }, '<C-[>', '<Esc>')
--- TODO: Determine if these quickfix and location list keymaps are still needed since there are already pre-defined shortcuts for them
-vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz', { desc = 'Quickfix list backwards/previous' })
-vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz', { desc = 'Quickfix list forward/next' })
-vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz', { desc = 'Location list forward/next' })
-vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz', { desc = 'Location list backwards/previous' })
 vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Replace/substitute word under cursor throughout file' })
--- vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move visually selection down by one line' }) -- Overrides J (aka Join). Default join still works when not in visual mode (aka line cursor is on)
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move visually selection up by one line' })
 vim.keymap.set('n', '<leader>gp', '`[v`]', { desc = 'Visually select pasted (or previously changed) text' })
 
 -- [[ Basic Autocommands ]]
@@ -635,19 +620,19 @@ require('lazy').setup({
 
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+          -- map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
           -- map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
-          map('gra', require('actions-preview').code_actions, '[G]oto Code [A]ction', { 'n', 'x' })
+          -- map('gra', require('actions-preview').code_actions, '[G]oto Code [A]ction', { 'n', 'x' })
 
           -- Find references for the word under your cursor.
-          map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+          -- map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 
           -- Jump to the implementation of the word under your cursor.
           --  Useful when your language has ways of declaring types without an actual implementation.
-          map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+          -- map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
 
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
@@ -660,7 +645,7 @@ require('lazy').setup({
 
           -- Fuzzy find all the symbols in your current document.
           --  Symbols are things like variables, functions, types, etc.
-          map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
+          -- map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
 
           -- Fuzzy find all the symbols in your current workspace.
           --  Similar to document symbols, except searches over your entire project.
@@ -669,7 +654,7 @@ require('lazy').setup({
           -- Jump to the type of the word under your cursor.
           --  Useful when you're not sure what type a variable is and you want to see
           --  the definition of its *type*, not where it was *defined*.
-          map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
+          -- map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
           -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
           ---@param client vim.lsp.Client
@@ -937,20 +922,11 @@ require('lazy').setup({
         config = function()
           local ls = require 'luasnip'
 
-          vim.keymap.set({ 'i', 's' }, '<C-G>', function()
-            ls.expand()
-          end, { silent = true, desc = 'Luasnip - Jump forward' })
-          vim.keymap.set({ 'i', 's' }, '<C-J>', function()
-            ls.jump(1)
-          end, { silent = true, desc = 'Luasnip - Jump forward' })
-          vim.keymap.set({ 'i', 's' }, '<C-K>', function()
-            ls.jump(-1)
-          end, { silent = true, desc = 'Luasnip - Jump backward' })
           vim.keymap.set({ 'i', 's' }, '<C-L>', function()
             if ls.choice_active() then
               ls.change_choice(1)
             end
-          end, { silent = true, desc = 'Luasnip - Change choice' })
+          end, { silent = true, desc = 'Luasnip (blink.cmp) - Change choice for a choice node' })
         end,
       },
       'folke/lazydev.nvim',
@@ -995,7 +971,7 @@ require('lazy').setup({
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        documentation = { auto_show = true, auto_show_delay_ms = 500 },
       },
 
       sources = {
@@ -1059,7 +1035,14 @@ require('lazy').setup({
       --  - ci'  - [C]hange [I]nside [']quote
       --
       --  Full list - https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-ai.md
+      --  :h MiniAi-builtin-textobjects
       require('mini.ai').setup { n_lines = 500 }
+
+      -- NOTE: To add <tab> character in insert mode (as per docs) - <C-v><tab>
+      require('mini.keymap').map_multistep({ 'i', 's' }, '<Tab>', { 'luasnip_next', 'jump_after_close', 'jump_after_tsnode' })
+      require('mini.keymap').map_multistep({ 'i', 's' }, '<S-Tab>', { 'luasnip_prev', 'jump_before_open', 'jump_before_tsnode' })
+
+      require('mini.move').setup() -- Move lines around with <M-...>
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       --

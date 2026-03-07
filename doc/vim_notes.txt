@@ -114,6 +114,7 @@ L - move cursor to the lower part of screen
 	n/N - go to next/previous search
 	gn/gN - go to next/previous search AND visually select
 * or # - forward/backward search of WHOLE word under cursor
+	By default, it adds the word/selection in the "/ (last search pattern) register. E.g. if you want to substitute word under cursor (where * was used), then you can use ":%s//new_word"
 g* or g# - forward/backward search of substring/partial word under cursor
 g;/g, - Go to previous/next change in the current buffer (relates to changelist)
 	:changes - shows changelist of current buffer
@@ -461,3 +462,5 @@ Fun/Useless commands:
 		(vim only):h spoon
 		(vim only):h howto
 
+Other cheatsheets:
+	https://github.com/ibhagwan/vim-cheatsheet?tab=readme-ov-file
