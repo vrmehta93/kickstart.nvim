@@ -45,6 +45,7 @@ Substitute command - :[range]s[ubstitute]/{search pattern}/{replacement string}/
 		- with only "/c" - ask for confirmation each time
 	count example:
 		:s/.*/#include &/4 - Perform substitution on 4 lines starting at current line
+			& - text that was matched
 	Post running substitute command
 		- g& - redo your substitution to entire file
 	To do consecutive substitutions, use pipe '|'
@@ -72,7 +73,7 @@ Regex
 		'\S' - everything that's not a whitespace
 		'\v' - very magic mode
 		'\r' - newline
-	Capture groups
+	Capture groups (e.g. using substitute command)
 		:s/\old/&-append-something - append '-append-something' to search string
 		:s/"\(.*\)"/\1 - removing surrounding "" from string
 		:s/\v(\d+)-(\d+)/\2-\1 - swap positions of 2 number groups around '-'
@@ -462,5 +463,3 @@ Fun/Useless commands:
 		(vim only):h spoon
 		(vim only):h howto
 
-Other cheatsheets:
-	https://github.com/ibhagwan/vim-cheatsheet?tab=readme-ov-file
