@@ -51,6 +51,7 @@ Substitute command - :[range]s[ubstitute]/{search pattern}/{replacement string}/
 	To do consecutive substitutions, use pipe '|'
 		e.g. %s/... |  %s/...
 	substitution vs macros - Typically substitution for single line and macros for multiple lines
+	For substitution in visual block, use '\%V'. e.g. :'<,'>s/\%Vabc/xyz/g
 :s - repeat the last substitution command with the last used pattern and replacement string
 & - repeat last subtitute command
 
